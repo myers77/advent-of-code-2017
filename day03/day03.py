@@ -1,17 +1,68 @@
-# with open('input.txt', 'r') as myfile:
+# input = 347991
 
-#   total = 0
-#   for line in [s for s in myfile.readlines()]:
-#     nums = list(map(int, line.split( )))
-#     total += max(nums) - min(nums)
+# x = 0
+# y = 0
+# d = 1
+# m = 1
 
-#   print(total)
+# count = 1
 
-with open('input.txt', 'r') as myfile:
-  input = 347991
-  total = 0
-  for line in [s for s in myfile.readlines()]:
-    nums = list(map(int, line.split( )))
-    total += max(nums) - min(nums)
+# array = dict()
 
-  print(total)
+# while count < input:
+#   while 2 * x * d < m and count <= input:
+#     if count == input:
+#       print(abs(x) + (abs(y)))
+#       break
+#     array[(x, y)] = count
+#     x = x + d
+#     count += 1
+#   while 2 * y * d < m and count <= input:
+#     if count == input:
+#       print(abs(x) + (abs(y)))
+#       break
+#     array[(x, y)] = count
+#     y = y + d
+#     count += 1
+#   d = -1 * d
+#   m = m + 1
+
+import operator
+
+input = 347991
+
+x = 1
+y = 0
+d = 1
+m = 1
+
+count = 1
+
+array = { (0, 0): 1 }
+
+def get_neighbor_sum(x, y, array):
+  sum = 0
+  neighbors = [(i, j) for i in range(x - 1, x + 2) for j in range (y - 1, y + 2)]
+  neighbors.remove((x, y))
+  for neighbor in neighbors:
+    if neighbor in array:
+      sum += array[neighbor]
+  return sum
+
+while count < input:
+  while 2 * x * d < m:
+    count = get_neighbor_sum(x, y, array)
+    if count > input:
+      print(sum)
+      break
+    array[(x, y)] = count
+    x = x + d
+  while 2 * y * d < m:
+    count = get_neighbor_sum(x, y, array)
+    if count > input:
+      print(count)
+      break
+    array[(x, y)] = count
+    y = y + d
+  d = -1 * d
+  m = m + 1
