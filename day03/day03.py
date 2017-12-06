@@ -49,6 +49,8 @@ def get_neighbor_sum(x, y, array):
       sum += array[neighbor]
   return sum
 
+def spiral(startx, starty, )
+
 while count < input:
   while 2 * x * d < m:
     count = get_neighbor_sum(x, y, array)
