@@ -11,9 +11,6 @@ def redistribute(input)
   return input
 end
 
-require 'benchmark'
-
-puts Benchmark.measure {
 input = File.read('input.txt').chomp.split.each.map(&:to_i)
 states = Hash.new()
 
@@ -24,4 +21,3 @@ end
 
 puts states.size
 puts states.size - states[input.hash]
-}
