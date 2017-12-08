@@ -19,30 +19,32 @@ weights = Hash.new
 children = Hash.new
 
 input.each_line do |line|
-  if /^(\w+) \((\d+)\)(?: -> (.+))?\n/.match(line)
-    matches = /^(\w+) \(\d+\)( -> (.+))?\n/.match(line)
-    weights[matches[1]] = /\d+/.match(line)[0].to_i
-    if /->(.+)\n/.match(line)
-      kids = []
-      words = /->(.+)\n/.match(line)[1]
-      words.split(", ").each { |word| kids << word.strip }
-      children[matches[1]] = kids
-    end
+  matches = /^(\w+) \((\d+)\)(?: ->(.+))?/.match(line)
+  weights[matches[1]] = matches[2].to_i
+  if matches[3]
+    children[matches[1]] = matches[3].strip.split(', ')
   end
 end
 
-# weights.each { |k, v| puts v }
 
-def balance(node, children, weights)
+def get_total_weight(node, children, weights)
   if !children[node]
     return weights[node]
   end
 
-  weight_sum = 0
-  children[node].each do |c|
-    weight_sum += balance(c, children, weights)
-  end
+  return children[node].each.inject(weights[node]) { |sum, node| sum + get_total_weight(node, children, weights) }
 end
 
+def check_balance(node, children, weights)
+  child_weights = []
 
-puts balance("hmvwl", children, weights)
+  children[node].each do |child|
+    child_weights << get_total_weight(node, children, weights)
+  end
+
+  if ()
+
+  puts child_weights
+end
+
+puts check_balance("hmvwl", children, weights)
