@@ -5,11 +5,11 @@ vars.default = 0
 highest = 0
 
 input.each_line do |line|
-  matches = /^(\w+) (\w+) (-?\d+) if (\w+) (.+) (-?\d+)/.match(line)
+  var, op, val, _, ifvar, ifop, ifval = line.split
   highest = [highest, vars.values.max].max if !vars.empty?
 
-  if vars[matches[4]].public_send(matches[5], matches[6].to_i)
-    vars[matches[1]] += matches[2] == 'inc' ? matches[3].to_i : -1 * matches[3].to_i
+  if vars[ifvar].public_send(ifop, ifval.to_i)
+    vars[var] += op == 'inc' ? val.to_i : -1 * val.to_i
   end
 end
 
