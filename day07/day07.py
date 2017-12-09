@@ -21,3 +21,42 @@ puzzle = [int(line.rstrip('\n').split) for line in open('input.txt')]
 
 #   print(total)
 
+  eval()
+
+if conditional == "==" {
+  if operation == "inc" {
+    //...
+  } else if operation == "dec" {
+    //....
+  }
+} else if conditional == "!=" {
+  if operation == "inc" {
+    //...
+  } else if operation == "dec" {
+    //....
+  }
+} else if conditional == ">=" {
+  if operation == "inc" {
+    //...
+  } else if operation == "dec" {
+    //....
+  }
+} else if conditional == "<=" {
+  if operation == "inc" {
+    //...
+  } else if operation == "dec" {
+    //....
+  }
+} else if conditional == ">" {
+  if operation == "inc" {
+    //...
+  } else if operation == "dec" {
+    //....
+  }
+} else if conditional == "<" {
+  if operation == "inc" {
+    //...
+  } else if operation == "dec" {
+    //....
+  }
+}
