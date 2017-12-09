@@ -10,14 +10,14 @@ defmodule Day09 do
     case {store[:garbage], store[:skip]} do
       {true, true} -> parse_helper(t, %{store | skip: false})
       {true, false} -> case h do
-        ">" -> parse_helper(t, %{store | garbage: false})
-        "!" -> parse_helper(t, %{store | skip: true})
+        ?> -> parse_helper(t, %{store | garbage: false})
+        ?! -> parse_helper(t, %{store | skip: true})
         _ -> parse_helper(t, %{store | garbage_count: store[:garbage_count] + 1})
       end
       {false, _} -> case h do
-        "{" -> parse_helper(t, %{store | count: store[:count] + store[:depth], depth: store[:depth] + 1})
-        "}" -> parse_helper(t, %{store | depth: store[:depth] - 1})
-        "<" -> parse_helper(t, %{store | garbage: true})
+        ?{ -> parse_helper(t, %{store | count: store[:count] + store[:depth], depth: store[:depth] + 1})
+        ?} -> parse_helper(t, %{store | depth: store[:depth] - 1})
+        ?< -> parse_helper(t, %{store | garbage: true})
         _ ->parse_helper(t, store)
       end
       _ -> parse_helper(t, store)
@@ -34,23 +34,22 @@ defmodule Benchmark do
   end
 end
 
-mystring = File.read!("input.txt")
-
-Benchmark.measure(fn ->
-  File.read!("input.txt")
-  |> String.trim
-  |> String.graphemes
-  |> Day09.parse
-  |> IO.inspect
-end)
-|> IO.puts
+{:ok, mystring} = File.read "input.txt"
+mystring = String.to_charlist(mystring)
 
 Benchmark.measure(fn ->
   mystring
-  |> String.trim
-  |> String.graphemes
   |> Day09.parse
   |> IO.inspect
 end)
 |> IO.puts
+
+Benchmark.measure(fn ->
+  File.read!("input.txt")
+  |> String.to_charlist
+  |> Day09.parse
+  |> IO.inspect
+end)
+|> IO.puts
+
 
