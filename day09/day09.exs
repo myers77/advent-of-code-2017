@@ -34,8 +34,19 @@ defmodule Benchmark do
   end
 end
 
+mystring = File.read!("input.txt")
+
 Benchmark.measure(fn ->
   File.read!("input.txt")
+  |> String.trim
+  |> String.graphemes
+  |> Day09.parse
+  |> IO.inspect
+end)
+|> IO.puts
+
+Benchmark.measure(fn ->
+  mystring
   |> String.trim
   |> String.graphemes
   |> Day09.parse
