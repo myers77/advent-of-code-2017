@@ -1,17 +1,22 @@
 input = File.read('input.txt').chomp
 
-count = 0
+count, garbage_count = 0, 0
 depth = 1
-skip, garbage = false
-garbage_count = 0
+skip, garbage = false, false
 
 input.each_char do |c|
   if garbage && skip
     skip = false
-    next
-  end
-
-  if !garbage
+  elsif garbage && !skip
+    case c
+      when '>'
+          garbage = false
+      when '!'
+        skip = true
+      else
+        garbage_count += 1
+    end
+  else
     case c
       when '{'
         count += depth
@@ -23,18 +28,8 @@ input.each_char do |c|
       else
         next
     end
-  else
-    case c
-      when '>'
-        if !skip
-          garbage = false
-        end
-      when '!'
-        skip = true
-      else
-        garbage_count += 1
-    end
   end
 end
 
+puts count
 puts garbage_count

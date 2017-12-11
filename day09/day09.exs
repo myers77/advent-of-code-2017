@@ -1,55 +1,32 @@
 defmodule Day09 do
   def parse(input) do
     store = %{count: 0, depth: 1, skip: false, garbage: false, garbage_count: 0}
-    parse_helper(input, store)
+
+    input
+    |> Enum.reduce(store, fn(char, store) -> parse_helper(char, store) end)
+    |> fn(store) -> {store[:count], store[:garbage_count]} end.()
   end
 
-  def parse_helper([], store), do: {store[:count], store[:garbage_count]}
+  def parse_helper(char, %{garbage: false} = store) do
+    case char do
+      ?{ -> %{store | count: store[:count] + store[:depth], depth: store[:depth] + 1}
+      ?} -> %{store | depth: store[:depth] - 1}
+      ?< -> %{store | garbage: true}
+      _ -> store
+    end
+  end
 
-  def parse_helper([h | t], store) do
-    case {store[:garbage], store[:skip]} do
-      {true, true} -> parse_helper(t, %{store | skip: false})
-      {true, false} -> case h do
-        ?> -> parse_helper(t, %{store | garbage: false})
-        ?! -> parse_helper(t, %{store | skip: true})
-        _ -> parse_helper(t, %{store | garbage_count: store[:garbage_count] + 1})
-      end
-      {false, _} -> case h do
-        ?{ -> parse_helper(t, %{store | count: store[:count] + store[:depth], depth: store[:depth] + 1})
-        ?} -> parse_helper(t, %{store | depth: store[:depth] - 1})
-        ?< -> parse_helper(t, %{store | garbage: true})
-        _ ->parse_helper(t, store)
-      end
-      _ -> parse_helper(t, store)
+  def parse_helper(_, %{garbage: true, skip: true} = store), do: %{store | skip: false}
+  def parse_helper(char, %{garbage: true, skip: false} = store) do
+    case char do
+      ?> -> %{store | garbage: false}
+      ?! -> %{store | skip: true}
+      _ -> %{store | garbage_count: store[:garbage_count] + 1}
     end
   end
 end
 
-defmodule Benchmark do
-  def measure(function) do
-    function
-    |> :timer.tc
-    |> elem(0)
-    |> Kernel./(1_000_000)
-  end
-end
-
-{:ok, mystring} = File.read "input.txt"
-mystring = String.to_charlist(mystring)
-
-Benchmark.measure(fn ->
-  mystring
-  |> Day09.parse
-  |> IO.inspect
-end)
-|> IO.puts
-
-Benchmark.measure(fn ->
-  File.read!("input.txt")
+File.read!("input.txt")
   |> String.to_charlist
   |> Day09.parse
   |> IO.inspect
-end)
-|> IO.puts
-
-
